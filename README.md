@@ -3,6 +3,7 @@
 # gocker
 DSL-like Dockerfile using Go
 
+[Go Playground](https://go.dev/play/p/x7ShKTcTrx3)
 
 ## Usage
 
