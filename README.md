@@ -6,7 +6,7 @@ DSL-like Dockerfile using Go
 
 After installing the package:
 ```
-go get -u lrwx00t/gocker/generator
+go get -u github.com/lrwx00t/gocker/generator
 ```
 
 Simple `main.go`:

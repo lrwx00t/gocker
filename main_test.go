@@ -1,7 +1,7 @@
 package main
 
 import (
-	. "lrwx00t/gocker/generator"
+	. "github.com/lrwx00t/gocker/generator"
 )
 
 // TODO:
