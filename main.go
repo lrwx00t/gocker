@@ -21,6 +21,7 @@ const (
 	Entrypoint
 	Expose
 	Cmd
+	WorkDir
 )
 
 type CommandType int
@@ -48,13 +49,17 @@ func COMMENT(arg string) Dockerfile {
 	return Dockerfile{CommandType(Comment), arg}
 }
 
+func WORKDIR(arg string) Dockerfile {
+	return Dockerfile{CommandType(WorkDir), arg}
+}
+
 func RUN(args []string) Dockerfile {
 	var args_literal string
 	for _, val := range args {
 		args_literal += "'" + val + "', "
 	}
 	args_literal = "[" + strings.TrimSuffix(args_literal, ", ") + "]"
-	return Dockerfile{CommandType(Run), args_literal}
+	return Dockerfile{CommandType(Run), args}
 }
 
 func CMD(arg string) Dockerfile {
@@ -77,6 +82,7 @@ var CommandsMap = map[CommandType]string{
 	CommandType(Maintainer): "MAINTAINER",
 	CommandType(Expose):     "EXPOSE",
 	CommandType(Entrypoint): "ENTRYPOINT",
+	CommandType(WorkDir):    "WORKDIR",
 }
 
 func GenerateDockerfileFromMap(funcInputMap map[CommandType]interface{}) {
@@ -106,9 +112,16 @@ func GenerateDockerfile(s []Dockerfile) {
 }
 
 func main() {
-	test := `hello
-	there 
-	commnd`
+	test := `set -x \
+	&& apk add --no-cache --virtual .build-deps \
+		build-base \
+		libffi-dev \
+		openssl-dev \
+	&& pip install --upgrade \
+		--pre azure-cli \
+		--extra-index-url https://azurecliprod.blob.core.windows.net/edge \
+		--no-cache-dir \
+	&& apk del .build-deps`
 	GenerateDockerfile([]Dockerfile{
 		FROM("ubuntu"),
 		CMD("This is a sample comment"),
@@ -117,8 +130,9 @@ func main() {
 		MAINTAINER("John Doe"),
 		ENTRYPOINT([]string{"ansible", "python"}),
 		EXPOSE("8080"),
-		EXPOSE("8080"),
+		EXPOSE("8081"),
 		RUN([]string{"echo 'hello world'2"}),
 		RUN([]string{test}),
+		WORKDIR("/app"),
 	})
 }
