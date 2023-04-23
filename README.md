@@ -1,3 +1,5 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/lrwx00t/gocker.svg)](https://pkg.go.dev/github.com/lrwx00t/gocker)
+
 # gocker
 DSL-like Dockerfile using Go
 
